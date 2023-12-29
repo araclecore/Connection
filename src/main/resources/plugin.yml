@@ -1,0 +1,9 @@
+name: Connection
+version: '0.0.1'
+main: ru.araclecore.battlecore.connection.Connection
+api-version: '1.20'
+prefix: Conection
+load: STARTUP
+authors: [ aracle ]
+description: Connection module for BattleCore
+website: adventures-server.ru
