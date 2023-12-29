@@ -1,0 +1,9 @@
+Debug: false
+Server: "server-name"
+Connection:
+  connection-id: "BattleCore-Gateway"
+  username: ""
+  password: ""
+  database: ""
+  address: ""
+  port: ""
