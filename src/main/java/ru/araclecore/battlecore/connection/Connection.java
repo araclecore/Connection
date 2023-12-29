@@ -6,6 +6,7 @@ import ru.araclecore.battlecore.connection.connection.Database;
 import ru.araclecore.battlecore.connection.connection.Statement;
 import ru.araclecore.battlecore.connection.utilities.Configuration;
 import ru.araclecore.battlecore.connection.utilities.Manager;
+import ru.araclecore.battlecore.connection.utilities.Utilities;
 
 public final class Connection extends JavaPlugin {
 
@@ -32,6 +33,7 @@ public final class Connection extends JavaPlugin {
     }
 
     private void BCD() {
+        if (!Utilities.connection()) return;
         Statement statement = new Statement(instance);
         statement.table("BCD");
         statement.column("uuid", "VARCHAR(36)");
@@ -44,6 +46,7 @@ public final class Connection extends JavaPlugin {
     }
 
     private void BCP() {
+        if (!Utilities.connection()) return;
         Statement statement = new Statement(instance);
         statement.table("BCP");
         statement.column("uuid", "VARCHAR(36)");
@@ -64,6 +67,7 @@ public final class Connection extends JavaPlugin {
     }
 
     private void BCH() {
+        if (!Utilities.connection()) return;
         Statement statement = new Statement(instance);
         statement.table("BCH");
         statement.column("id", "VARCHAR(36)");
@@ -89,6 +93,7 @@ public final class Connection extends JavaPlugin {
             if (manager.profile(player) != null) manager.profile(player).update();
             if (manager.hero(player) != null) manager.hero(player).update();
         }
+        if (database == null) return;
         database.close();
     }
 }
