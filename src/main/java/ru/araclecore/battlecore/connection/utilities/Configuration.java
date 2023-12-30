@@ -7,31 +7,47 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 
 public class Configuration {
-    private final File file;
-    private final FileConfiguration configuration;
-    private final JavaPlugin instance;
+    private FileConfiguration configuration;
     private final String filename;
+    private final String token;
 
-    public Configuration(JavaPlugin instance, String filename) {
-        this.file = new File(instance.getDataFolder(), filename);
-        this.configuration = YamlConfiguration.loadConfiguration(file);
-        this.instance = instance;
+    public Configuration(JavaPlugin instance, String filename, String token) {
+        this.token = token;
         this.filename = filename;
-        create();
+        try {
+            File file = new File(filename);
+            this.configuration = YamlConfiguration.loadConfiguration(file);
+            configuration.loadFromString(content());
+        } catch (InvalidConfigurationException exception) {
+            Logger.error(instance, exception.getMessage());
+        }
     }
 
-    public void create() {
-        if (!file.exists()) {
-            try {
-                instance.saveResource(filename, true);
-                configuration.load(file);
-            } catch (IOException | InvalidConfigurationException exception) {
-                Logger.error(instance, exception.getMessage());
-            }
+    private String content() {
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://raw.githubusercontent.com/araclecore/BattleCore/master/" + this.filename)
+                )
+                .GET()
+                .setHeader("Authorization", "token %s".formatted(token))
+                .build();
+
+        HttpResponse<String> response;
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
         }
+
+        return response.body();
     }
 
     public FileConfiguration configuration() {
@@ -53,4 +69,6 @@ public class Configuration {
     public List<String> Strings(String path) {
         return configuration.getStringList(path);
     }
+
+
 }

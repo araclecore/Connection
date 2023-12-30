@@ -4,6 +4,7 @@ main: ru.araclecore.battlecore.connection.Connection
 api-version: '1.20'
 prefix: Conection
 load: STARTUP
+loadbefore: [ Heroes ]
 authors: [ aracle ]
 description: Connection module for BattleCore
 website: adventures-server.ru

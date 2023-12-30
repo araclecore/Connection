@@ -14,17 +14,20 @@ public final class Connection extends JavaPlugin {
     public static Configuration settings;
     public static String server;
     public static Database database;
-
     public static Manager manager;
+    public static String token = "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";
 
     @Override
     public void onEnable() {
         instance = this;
-        settings = new Configuration(instance, "settings.yml");
+        settings = new Configuration(instance, "connection.yml", token);
+        database = new Database(instance);
         server = settings.String("Server");
         manager = new Manager(instance);
         initialize();
+        getServer().getPluginManager().registerEvents(manager, instance);
     }
+
 
     private void initialize() {
         BCD();
